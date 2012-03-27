@@ -19,8 +19,8 @@
 + (void)removeCacheForKey:(NSString*)key block:(void (^)())block;
 
 // Sync API
-+ (void)storeData:(NSData*)data key:(NSString*)key;
-+ (NSData*)dataForKey:(NSString*)key;
-+ (void)removeCacheForKey:(NSString*)key;
++ (void)storeData:(NSData*)data key:(NSString*)key __attribute__((deprecated));
++ (NSData*)dataForKey:(NSString*)key __attribute__((deprecated));
++ (void)removeCacheForKey:(NSString*)key __attribute__((deprecated));
 
 @end
