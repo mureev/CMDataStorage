@@ -62,7 +62,7 @@ static void createDiskCachePath() {
 
 + (BOOL)isCached:(NSString*)key {    
     NSFileManager *fileManager = [[NSFileManager new] autorelease];
-    if ([fileManager fileExistsAtPath:[CMDataStorage pathForDataFile:key]]) {
+    if (key && [key length] > 0 && [fileManager fileExistsAtPath:[CMDataStorage pathForDataFile:key]]) {
         return YES;
     }
     
