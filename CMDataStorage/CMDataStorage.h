@@ -10,17 +10,16 @@
 
 @interface CMDataStorage : NSObject
 
-+ (BOOL)isCached:(NSString*)key;
-+ (NSString*)pathForDataFile:(NSString*)key;
++ (id)sharedCacheStorage;
++ (id)sharedDocumentsStorage;
++ (id)sharedTemporaryStorage;
 
-// Async API (prefered)
-+ (void)storeData:(NSData*)data key:(NSString*)key block:(void (^)())block;
-+ (void)dataForKey:(NSString*)key block:(void (^)(NSData* data))block;
-+ (void)removeCacheForKey:(NSString*)key block:(void (^)())block;
+- (void)storeData:(NSData *)data key:(NSString *)key block:(void (^)(BOOL succeeds))block;
+- (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block;
+- (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block;
 
-// Sync API
-+ (void)storeData:(NSData*)data key:(NSString*)key __attribute__((deprecated));
-+ (NSData*)dataForKey:(NSString*)key __attribute__((deprecated));
-+ (void)removeCacheForKey:(NSString*)key __attribute__((deprecated));
+- (BOOL)isCached:(NSString *)key;
+- (NSURL *)fileURLWithKey:(NSString *)key;
+- (NSString *)filePathWithKey:(NSString *)key;
 
 @end
