@@ -1,5 +1,4 @@
-CMDataStorage
-=============
+# CMDataStorage
 
 Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Temp folder.
 
@@ -39,6 +38,7 @@ NSString *uniqueKey = @"unique name";
 [CMDataStorage.sharedCacheStorage dataForKey:uniqueKey block:^(NSData *data) {
     //
 }];
+```
 
 ### Sync read NSData from iOS Documents folder
 
