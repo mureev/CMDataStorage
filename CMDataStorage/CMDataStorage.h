@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <CommonCrypto/CommonDigest.h>
 
+// Safe file naming using MD5. Remove this define if you want use key as file name.
 #define MD5_FOR_KEY
 
 @interface CMDataStorage : NSObject
