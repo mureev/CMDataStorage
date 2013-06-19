@@ -11,3 +11,7 @@ Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Te
 - Safe file naming using MD5
 - Using modern NSURL iOS API for file paths
 - 100% bugs free. (Used in many projects)
+
+### License
+
+CMHTMLView is available under the MIT license. See the LICENSE file for more info.
