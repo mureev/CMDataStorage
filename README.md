@@ -22,7 +22,8 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-#### Async save NSData in iOS Cache folder
+### Async save NSData in iOS Cache folder
+
 ```objective-c
 NSString *uniqueKey = @"unique name";
 [CMDataStorage.sharedCacheStorage storeData:data key:uniqueKey block:^(BOOL succeeds) {
@@ -30,7 +31,8 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-#### Async read NSData from iOS Cache folder
+### Async read NSData from iOS Cache folder
+
 ```objective-c
 NSString *uniqueKey = @"unique name";
 [CMDataStorage.sharedCacheStorage dataForKey:uniqueKey block:^(NSData *data) {
@@ -38,7 +40,8 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-#### Sync read NSData from iOS Documents folder
+### Sync read NSData from iOS Documents folder
+
 ```objective-c
 NSString *uniqueKey = @"unique name";
 NSData *data = [CMDataStorage.sharedDocumentsStorage dataForKey:uniqueKey];
