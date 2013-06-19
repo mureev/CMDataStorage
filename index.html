@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>CMDataStorage by mureev</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>CMDataStorage</h1>
+        <h2>Simple and powerful API for read / write NSData from / to iOS Cache / Documents / Tmp folder</h2>
+        <a href="https://github.com/mureev/CMDataStorage" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="cmdatastorage" class="anchor" href="#cmdatastorage"><span class="octicon octicon-link"></span></a>CMDataStorage</h1>
+
+<p>Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Temp folder.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Extremely simple implementation and powerful API</li>
+<li>Separated GCD queues</li>
+<li>Callbacks based on blocks</li>
+<li>Safe file naming using MD5</li>
+<li>Using modern NSURL iOS API for file paths</li>
+<li>100% bugs free. (Used in many projects)</li>
+</ul><h2>
+<a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
+
+<h4>
+<a name="async-save-nsdata-in-ios-documents-folder" class="anchor" href="#async-save-nsdata-in-ios-documents-folder"><span class="octicon octicon-link"></span></a>Async save NSData in iOS Documents folder</h4>
+
+<div class="highlight"><pre><span class="n">NSString</span> <span class="o">*</span><span class="n">uniqueKey</span> <span class="o">=</span> <span class="s">@"unique name"</span><span class="p">;</span>
+<span class="p">[</span><span class="n">CMDataStorage</span><span class="p">.</span><span class="n">sharedDocumentsStorage</span> <span class="n">storeData</span><span class="o">:</span><span class="n">data</span> <span class="n">key</span><span class="o">:</span><span class="n">uniqueKey</span> <span class="n">block</span><span class="o">:^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">succeeds</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//</span>
+<span class="p">}];</span>
+</pre></div>
+
+<h3>
+<a name="async-save-nsdata-in-ios-cache-folder" class="anchor" href="#async-save-nsdata-in-ios-cache-folder"><span class="octicon octicon-link"></span></a>Async save NSData in iOS Cache folder</h3>
+
+<div class="highlight"><pre><span class="n">NSString</span> <span class="o">*</span><span class="n">uniqueKey</span> <span class="o">=</span> <span class="s">@"unique name"</span><span class="p">;</span>
+<span class="p">[</span><span class="n">CMDataStorage</span><span class="p">.</span><span class="n">sharedCacheStorage</span> <span class="n">storeData</span><span class="o">:</span><span class="n">data</span> <span class="n">key</span><span class="o">:</span><span class="n">uniqueKey</span> <span class="n">block</span><span class="o">:^</span><span class="p">(</span><span class="kt">BOOL</span> <span class="n">succeeds</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//</span>
+<span class="p">}];</span>
+</pre></div>
+
+<h3>
+<a name="async-read-nsdata-from-ios-cache-folder" class="anchor" href="#async-read-nsdata-from-ios-cache-folder"><span class="octicon octicon-link"></span></a>Async read NSData from iOS Cache folder</h3>
+
+<div class="highlight"><pre><span class="n">NSString</span> <span class="o">*</span><span class="n">uniqueKey</span> <span class="o">=</span> <span class="s">@"unique name"</span><span class="p">;</span>
+<span class="p">[</span><span class="n">CMDataStorage</span><span class="p">.</span><span class="n">sharedCacheStorage</span> <span class="n">dataForKey</span><span class="o">:</span><span class="n">uniqueKey</span> <span class="n">block</span><span class="o">:^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//</span>
+<span class="p">}];</span>
+</pre></div>
+
+<h3>
+<a name="sync-read-nsdata-from-ios-documents-folder" class="anchor" href="#sync-read-nsdata-from-ios-documents-folder"><span class="octicon octicon-link"></span></a>Sync read NSData from iOS Documents folder</h3>
+
+<div class="highlight"><pre><span class="n">NSString</span> <span class="o">*</span><span class="n">uniqueKey</span> <span class="o">=</span> <span class="s">@"unique name"</span><span class="p">;</span>
+<span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">CMDataStorage</span><span class="p">.</span><span class="n">sharedDocumentsStorage</span> <span class="n">dataForKey</span><span class="o">:</span><span class="n">uniqueKey</span><span class="p">];</span>
+</pre></div>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>CMDataStorage is available under the MIT license. See the LICENSE file for more info.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mureev/CMDataStorage/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mureev/CMDataStorage/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mureev/CMDataStorage"></a> is maintained by <a href="https://github.com/mureev">mureev</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-30548979-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
