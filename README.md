@@ -5,7 +5,7 @@ Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Te
 ## Features
 
 - Extremely simple implementation and powerful API
-- Separated GCD queue
+- Separated GCD queues
 - Callbacks based on blocks
 - Safe file naming using MD5
 - Using modern NSURL iOS API for file paths
