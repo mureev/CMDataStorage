@@ -1,7 +1,7 @@
 CMDataStorage
 =============
 
-Simple and powerful API for read/write NSData from/to iOS Cache / Documents / Temp folder
+Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Temp folder.
 
 ### Features
 
