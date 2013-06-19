@@ -13,7 +13,7 @@ Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Te
 
 ## Example Usage
 
-### Async save NSData in iOS Documents folder
+#### Async save NSData in iOS Documents folder
 
 ```objective-c
 NSString *uniqueKey = @"unique name";
@@ -22,7 +22,7 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-### Async save NSData in iOS Cache folder
+#### Async save NSData in iOS Cache folder
 
 ```objective-c
 NSString *uniqueKey = @"unique name";
@@ -31,7 +31,7 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-### Async read NSData from iOS Cache folder
+#### Async read NSData from iOS Cache folder
 
 ```objective-c
 NSString *uniqueKey = @"unique name";
@@ -40,7 +40,7 @@ NSString *uniqueKey = @"unique name";
 }];
 ```
 
-### Sync read NSData from iOS Documents folder
+#### Sync read NSData from iOS Documents folder
 
 ```objective-c
 NSString *uniqueKey = @"unique name";
