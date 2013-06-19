@@ -120,7 +120,7 @@ static dispatch_queue_t get_disk_io_queue() {
 - (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block {
     if (block) {
         if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-            if ([self isCached:key]) {
+            if ([self isStored:key]) {
                 dispatch_async(get_disk_io_queue(), ^{
                     NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
                     block(data);
@@ -135,7 +135,7 @@ static dispatch_queue_t get_disk_io_queue() {
 }
 
 - (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block {
-    if ([self isCached:key]) {
+    if ([self isStored:key]) {
         dispatch_async(get_disk_io_queue(), ^{
             BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
             
@@ -152,7 +152,20 @@ static dispatch_queue_t get_disk_io_queue() {
     }
 }
 
-- (BOOL)isCached:(NSString *)key {
+- (NSData *)dataForKey:(NSString *)key {
+    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+        if ([self isStored:key]) {
+            NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
+            return data;
+        } else {
+            return nil;
+        }
+    } else {
+        return nil;
+    }
+}
+
+- (BOOL)isStored:(NSString *)key {
     if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
         return [[self fileURLWithKey:key] checkResourceIsReachableAndReturnError:nil];
     }
@@ -162,8 +175,12 @@ static dispatch_queue_t get_disk_io_queue() {
 
 - (NSURL *)fileURLWithKey:(NSString *)key {
     if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+#ifdef MD5_FOR_KEY
         NSString *internalKey = [CMDataStorage internalKey:key];
         return [self.cachePath URLByAppendingPathComponent:internalKey isDirectory:NO];
+#else
+        return [self.cachePath URLByAppendingPathComponent:key isDirectory:NO];
+#endif
     } else {
         return nil;
     }
