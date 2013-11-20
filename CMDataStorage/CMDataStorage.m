@@ -50,7 +50,7 @@ static dispatch_queue_t get_disk_io_queue() {
 #pragma mark - Public
 
 
-+ (id)sharedCacheStorage {
++ (instancetype)sharedCacheStorage {
     static dispatch_once_t onceToken;
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
@@ -67,7 +67,7 @@ static dispatch_queue_t get_disk_io_queue() {
     return sharedInstance;
 }
 
-+ (id)sharedDocumentsStorage {
++ (instancetype)sharedDocumentsStorage {
     static dispatch_once_t onceToken;
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
@@ -84,7 +84,7 @@ static dispatch_queue_t get_disk_io_queue() {
     return sharedInstance;
 }
 
-+ (id)sharedTemporaryStorage {
++ (instancetype)sharedTemporaryStorage {
     static dispatch_once_t onceToken;
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
@@ -99,8 +99,8 @@ static dispatch_queue_t get_disk_io_queue() {
     return sharedInstance;
 }
 
-- (void)storeData:(NSData *)data key:(NSString *)key block:(void (^)(BOOL succeeds))block {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+- (void)writeData:(NSData *)data key:(NSString *)key block:(void (^)(BOOL succeeds))block {
+    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0 && data && [data isKindOfClass:[NSData class]]) {
         dispatch_async(get_disk_io_queue(), ^{
             BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
             
@@ -118,16 +118,12 @@ static dispatch_queue_t get_disk_io_queue() {
 }
 
 - (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block {
-    if (block) {
-        if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-            if ([self isStored:key]) {
-                dispatch_async(get_disk_io_queue(), ^{
-                    NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
-                    block(data);
-                });
-            } else {
-                block(nil);
-            }
+    if (block && key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+        if ([self isStored:key]) {
+            dispatch_async(get_disk_io_queue(), ^{
+                NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
+                block(data);
+            });
         } else {
             block(nil);
         }
@@ -135,20 +131,36 @@ static dispatch_queue_t get_disk_io_queue() {
 }
 
 - (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block {
-    if ([self isStored:key]) {
-        dispatch_async(get_disk_io_queue(), ^{
-            BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
-            
-            if (!succeeds) {
-                NSLog(@"Can't remove data to path '%@'", [[self fileURLWithKey:key] path]);
-            }
-            
-            if (block) {
-                block(succeeds);
-            }
-        });
-    } else if (block) {
-        block(YES);
+    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+        if ([self isStored:key]) {
+            dispatch_async(get_disk_io_queue(), ^{
+                BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
+                
+                if (!succeeds) {
+                    NSLog(@"Can't remove data to path '%@'", [[self fileURLWithKey:key] path]);
+                }
+                
+                if (block) {
+                    block(succeeds);
+                }
+            });
+        } else if (block) {
+            block(YES);
+        }
+    }
+}
+
+- (BOOL)writeData:(NSData *)data key:(NSString *)key {
+    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+        BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
+        
+        if (!succeeds) {
+            NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
+        }
+        
+        return succeeds;
+    } else {
+        return NO;
     }
 }
 
@@ -194,7 +206,7 @@ static dispatch_queue_t get_disk_io_queue() {
 #pragma mark - Private
 
 
-+ (NSString *)internalKey:(NSString *)key {    
++ (NSString *)internalKey:(NSString *)key {
     const char *ptr = [key UTF8String];
     unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
     CC_MD5(ptr, strlen(ptr), md5Buffer);
