@@ -1,7 +1,7 @@
-# CMDataStorage
+# CMDataStorage ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
-[![Badge w/ Version](http://cocoapod-badges.herokuapp.com/v/CMDataStorage/badge.png)](http://cocoadocs.org/docsets/CMDataStorage)
-[![Badge w/ Platform](http://cocoapod-badges.herokuapp.com/p/CMDataStorage/badge.png)](http://cocoadocs.org/docsets/CMDataStorage)
+[![Badge w/ Version](https://cocoapod-badges.herokuapp.com/v/CMDataStorage/badge.png)](http://cocoadocs.org/docsets/CMDataStorage)
+[![Badge w/ Platform](https://cocoapod-badges.herokuapp.com/p/CMDataStorage/badge.png)](http://cocoadocs.org/docsets/CMDataStorage)
 
 Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Temp folder.
 
