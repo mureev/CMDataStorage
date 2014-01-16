@@ -202,6 +202,16 @@ static dispatch_queue_t get_disk_io_queue() {
     return [[self fileURLWithKey:key] path];
 }
 
+- (NSArray*)allKeysURLs {
+    NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtURL:self.cachePath includingPropertiesForKeys:nil options:0 error:nil];
+    return dirContents;
+}
+
+- (NSArray*)allKeysPaths {
+    NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtPath:[self.cachePath path] error:nil];
+    return dirContents;
+}
+
 
 #pragma mark - Private
 

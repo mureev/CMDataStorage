@@ -105,4 +105,22 @@
  */
 - (NSString *)filePathWithKey:(NSString *)key;
 
+/**
+Returns a new array containing the CMDataStorage files paths.
+ 
+ The order of the elements in the array is not defined.
+ 
+ @return The NSArray object with all files url stored in CMDataStorage folder.
+ */
+- (NSArray*)allKeysURLs;
+
+/**
+ Returns a new array containing the CMDataStorage files paths.
+ 
+ The order of the elements in the array is not defined.
+ 
+ @return The NSArray object with all files paths stored in
+ */
+- (NSArray*)allKeysPaths;
+
 @end
