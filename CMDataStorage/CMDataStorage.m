@@ -57,7 +57,7 @@ static dispatch_queue_t get_disk_io_queue() {
         sharedInstance = [CMDataStorage new];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:kSubfolder];
+        NSString *path = [paths[0] stringByAppendingPathComponent:kSubfolder];
         sharedInstance.cachePath = [NSURL fileURLWithPath:path isDirectory:YES];
         
         if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
@@ -74,7 +74,7 @@ static dispatch_queue_t get_disk_io_queue() {
         sharedInstance = [CMDataStorage new];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:kSubfolder];
+        NSString *path = [paths[0] stringByAppendingPathComponent:kSubfolder];
         sharedInstance.cachePath = [NSURL fileURLWithPath:path isDirectory:YES];
         
         if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
