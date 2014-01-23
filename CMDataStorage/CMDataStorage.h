@@ -20,31 +20,31 @@
 /**
  Asynchronously writes data to the specified storage.
  
- Asynchronously call write on separeated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
+ Asynchronously call write on separated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
  
  @param data The data to be written. Required.
  @param key The string that will used as file name. Or MD5 of key if MD5_FOR_KEY define exist. Required.
- @param block Complition block with result BOOL value. Optional.
+ @param block Completion block with result BOOL value. Optional.
  */
 - (void)writeData:(NSData *)data key:(NSString *)key block:(void (^)(BOOL succeeds))block;
 
 /**
  Asynchronously reads data from the specified storage / key.
  
- Asynchronously call read on separeated GCD queue with key as file name (or MD5 of key). After it reads the data, the method will call block. If any error occured or there is no file for that key than the data in complition block will be nil.
+ Asynchronously call read on separated GCD queue with key as file name (or MD5 of key). After it reads the data, the method will call block. If any error occured or there is no file for that key than the data in complition block will be nil.
  
  @param key The string that will used as file name. Or MD5 of key if MD5_FOR_KEY define exist. Required.
- @param block Complition block with result NSData value. Required.
+ @param block Completion block with result NSData value. Required.
  */
 - (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block;
 
 /**
  Asynchronously remove data to the specified storage / key.
  
- Asynchronously call delete on separeated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
+ Asynchronously call delete on separated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
  
  @param key The string that will used as file name. Or MD5 of key if MD5_FOR_KEY define exist. Required.
- @param block Complition block with result BOOL value. Optional.
+ @param block Completion block with result BOOL value. Optional.
  */
 - (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block;
 
@@ -106,7 +106,7 @@
 - (NSString *)filePathWithKey:(NSString *)key;
 
 /**
-Returns a new array containing the CMDataStorage files paths.
+ Returns a new array containing the CMDataStorage files paths.
  
  The order of the elements in the array is not defined.
  
