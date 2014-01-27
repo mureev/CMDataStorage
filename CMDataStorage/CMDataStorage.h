@@ -14,7 +14,9 @@
 @interface CMDataStorage : NSObject
 
 + (instancetype)sharedCacheStorage;
+
 + (instancetype)sharedDocumentsStorage;
+
 + (instancetype)sharedTemporaryStorage;
 
 /**
@@ -112,7 +114,7 @@
  
  @return The NSArray object with all files url stored in CMDataStorage folder.
  */
-- (NSArray*)allKeysURLs;
+- (NSArray *)allKeysURLs;
 
 /**
  Returns a new array containing the CMDataStorage files paths.
@@ -121,6 +123,6 @@
  
  @return The NSArray object with all files paths stored in
  */
-- (NSArray*)allKeysPaths;
+- (NSArray *)allKeysPaths;
 
 @end

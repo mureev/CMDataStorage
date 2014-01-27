@@ -9,14 +9,14 @@
 
 #define kSubfolder     @"CMStorage"
 
-@interface CMDataStorage()
+@interface CMDataStorage ()
 
 @property (retain) NSURL *cachePath;
 
 + (NSString *)internalKey:(NSString *)key;
 + (BOOL)createDirectoryForURL:(NSURL *)dirPath;
 
-static NSFileManager * get_file_manager();
+static NSFileManager *get_file_manager();
 static dispatch_queue_t get_disk_io_queue();
 
 @end
@@ -28,7 +28,7 @@ static dispatch_queue_t get_disk_io_queue();
 #pragma mark - Static functions
 
 
-static NSFileManager * get_file_manager() {
+static NSFileManager *get_file_manager() {
     static NSFileManager *sharedFileManager;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -40,10 +40,10 @@ static NSFileManager * get_file_manager() {
 static dispatch_queue_t get_disk_io_queue() {
     static dispatch_queue_t _diskIOQueue;
     static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		_diskIOQueue = dispatch_queue_create("data-disk-cache.io", DISPATCH_QUEUE_CONCURRENT);
-	});
-	return _diskIOQueue;
+    dispatch_once(&onceToken, ^{
+        _diskIOQueue = dispatch_queue_create("data-disk-cache.io", DISPATCH_QUEUE_CONCURRENT);
+    });
+    return _diskIOQueue;
 }
 
 
@@ -55,11 +55,11 @@ static dispatch_queue_t get_disk_io_queue() {
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
         sharedInstance = [CMDataStorage new];
-        
+
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *path = [paths[0] stringByAppendingPathComponent:kSubfolder];
         sharedInstance.cachePath = [NSURL fileURLWithPath:path isDirectory:YES];
-        
+
         if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
             sharedInstance = nil;
         }
@@ -72,11 +72,11 @@ static dispatch_queue_t get_disk_io_queue() {
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
         sharedInstance = [CMDataStorage new];
-        
+
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *path = [paths[0] stringByAppendingPathComponent:kSubfolder];
         sharedInstance.cachePath = [NSURL fileURLWithPath:path isDirectory:YES];
-        
+
         if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
             sharedInstance = nil;
         }
@@ -89,9 +89,9 @@ static dispatch_queue_t get_disk_io_queue() {
     static CMDataStorage *sharedInstance;
     dispatch_once(&onceToken, ^{
         sharedInstance = [CMDataStorage new];
-        
+
         sharedInstance.cachePath = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-        
+
         if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
             sharedInstance = nil;
         }
@@ -103,11 +103,11 @@ static dispatch_queue_t get_disk_io_queue() {
     if (key && [key isKindOfClass:[NSString class]] && [key length] > 0 && data && [data isKindOfClass:[NSData class]]) {
         dispatch_async(get_disk_io_queue(), ^{
             BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
-            
+
             if (!succeeds) {
                 NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
             }
-            
+
             if (block) {
                 block(succeeds);
             }
@@ -135,11 +135,11 @@ static dispatch_queue_t get_disk_io_queue() {
         if ([self isStored:key]) {
             dispatch_async(get_disk_io_queue(), ^{
                 BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
-                
+
                 if (!succeeds) {
                     NSLog(@"Can't remove data to path '%@'", [[self fileURLWithKey:key] path]);
                 }
-                
+
                 if (block) {
                     block(succeeds);
                 }
@@ -153,11 +153,11 @@ static dispatch_queue_t get_disk_io_queue() {
 - (BOOL)writeData:(NSData *)data key:(NSString *)key {
     if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
         BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
-        
+
         if (!succeeds) {
             NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
         }
-        
+
         return succeeds;
     } else {
         return NO;
@@ -181,7 +181,7 @@ static dispatch_queue_t get_disk_io_queue() {
     if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
         return [[self fileURLWithKey:key] checkResourceIsReachableAndReturnError:nil];
     }
-    
+
     return NO;
 }
 
@@ -202,12 +202,12 @@ static dispatch_queue_t get_disk_io_queue() {
     return [[self fileURLWithKey:key] path];
 }
 
-- (NSArray*)allKeysURLs {
+- (NSArray *)allKeysURLs {
     NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtURL:self.cachePath includingPropertiesForKeys:nil options:0 error:nil];
     return dirContents;
 }
 
-- (NSArray*)allKeysPaths {
+- (NSArray *)allKeysPaths {
     NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtPath:[self.cachePath path] error:nil];
     return dirContents;
 }
@@ -221,22 +221,22 @@ static dispatch_queue_t get_disk_io_queue() {
     unsigned char md5Buffer[CC_MD5_DIGEST_LENGTH];
     CC_MD5(ptr, strlen(ptr), md5Buffer);
     NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    
+
     for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
-        [output appendFormat:@"%02x",md5Buffer[i]];
+        [output appendFormat:@"%02x", md5Buffer[i]];
     }
-    
+
     return output;
 }
 
 + (BOOL)createDirectoryForURL:(NSURL *)dirPath {
     NSError *error = nil;
     [get_file_manager() createDirectoryAtURL:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
-    
+
     if (error) {
         NSLog(@"Fail to create storage directory '%@'", [error localizedDescription]);
     }
-    
+
     return !error;
 }
 
