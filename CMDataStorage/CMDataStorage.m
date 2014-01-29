@@ -11,7 +11,7 @@
 
 @interface CMDataStorage ()
 
-@property (retain) NSURL *cachePath;
+@property (nonatomic) NSURL *cachePath;
 
 + (NSString *)internalKey:(NSString *)key;
 + (BOOL)createDirectoryForURL:(NSURL *)dirPath;
