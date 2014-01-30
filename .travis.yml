@@ -1,3 +1,4 @@
 language: objective-c
+xcode_sdk: iphonesimulator
 xcode_project: Tests.xcodeproj
 xcode_scheme: Tests
