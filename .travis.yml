@@ -1,6 +1,4 @@
 language: objective-c
 xcode_sdk: iphonesimulator
-xcode_project: Tests.xcodeproj
+xcode_project: 'Test Project/Tests.xcodeproj'
 xcode_scheme: Tests
-before_install:
-  - cd 'Test Project'
