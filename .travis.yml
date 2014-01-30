@@ -2,3 +2,7 @@ language: objective-c
 xcode_sdk: iphonesimulator
 xcode_project: Tests.xcodeproj
 xcode_scheme: Tests
+before_install:
+  - brew update
+  - brew install xctool --HEAD
+  - cd 'Test Project'
