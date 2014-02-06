@@ -5,7 +5,7 @@
 [![Cocoapods](https://cocoapod-badges.herokuapp.com/p/CMDataStorage/badge.png)](http://cocoapods.org/?q=name%3ACMDataStorage%2A)
 ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
-Simple and powerful lib for read/write NSData from/to iOS Documents / Cache / Temp folder.
+Simple and powerful API to work with NSData in IOS Cache, Documents and Temp folder.
 
 ## Features
 
