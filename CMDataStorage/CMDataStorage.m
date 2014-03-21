@@ -13,9 +13,6 @@
 
 @property (nonatomic) NSURL *cachePath;
 
-+ (NSString *)internalKey:(NSString *)key;
-+ (BOOL)createDirectoryForURL:(NSURL *)dirPath;
-
 static NSFileManager *get_file_manager();
 static dispatch_queue_t get_disk_io_queue();
 
@@ -100,114 +97,119 @@ static dispatch_queue_t get_disk_io_queue() {
 }
 
 - (void)writeData:(NSData *)data key:(NSString *)key block:(void (^)(BOOL succeeds))block {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0 && data && [data isKindOfClass:[NSData class]]) {
+    NSParameterAssert(key);
+    NSParameterAssert(data);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    NSAssert([data isKindOfClass:[NSData class]] && [data length] > 0, @"data");
+    
+    dispatch_async(get_disk_io_queue(), ^{
+        BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
+        
+        if (!succeeds) {
+            NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
+        }
+        
+        if (block) {
+            block(succeeds);
+        }
+    });
+}
+
+- (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block {
+    NSParameterAssert(key);
+    NSParameterAssert(block);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
+    if ([self isStored:key]) {
         dispatch_async(get_disk_io_queue(), ^{
-            BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
+            NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
+            block(data);
+        });
+    } else {
+        block(nil);
+    }
+}
 
+- (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block {
+    NSParameterAssert(key);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
+    if ([self isStored:key]) {
+        dispatch_async(get_disk_io_queue(), ^{
+            BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
+            
             if (!succeeds) {
-                NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
+                NSLog(@"Can't remove data to path '%@'", [[self fileURLWithKey:key] path]);
             }
-
+            
             if (block) {
                 block(succeeds);
             }
         });
     } else if (block) {
-        block(NO);
-    }
-}
-
-- (void)dataForKey:(NSString *)key block:(void (^)(NSData *data))block {
-    if (block && key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-        if ([self isStored:key]) {
-            dispatch_async(get_disk_io_queue(), ^{
-                NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
-                block(data);
-            });
-        } else {
-            block(nil);
-        }
-    }
-}
-
-- (void)removeDataForKey:(NSString *)key block:(void (^)(BOOL succeeds))block {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-        if ([self isStored:key]) {
-            dispatch_async(get_disk_io_queue(), ^{
-                BOOL succeeds = [get_file_manager() removeItemAtURL:[self fileURLWithKey:key] error:nil];
-
-                if (!succeeds) {
-                    NSLog(@"Can't remove data to path '%@'", [[self fileURLWithKey:key] path]);
-                }
-
-                if (block) {
-                    block(succeeds);
-                }
-            });
-        } else if (block) {
-            block(YES);
-        }
+        block(YES);
     }
 }
 
 - (BOOL)writeData:(NSData *)data key:(NSString *)key {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-        BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
-
-        if (!succeeds) {
-            NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
-        }
-
-        return succeeds;
-    } else {
-        return NO;
+    NSParameterAssert(key);
+    NSParameterAssert(data);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    NSAssert([data isKindOfClass:[NSData class]] && [data length] > 0, @"data");
+    
+    BOOL succeeds = [data writeToURL:[self fileURLWithKey:key] atomically:YES];
+    
+    if (!succeeds) {
+        NSLog(@"Can't save data to path '%@'", [[self fileURLWithKey:key] path]);
     }
+    
+    return succeeds;
 }
 
 - (NSData *)dataForKey:(NSString *)key {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-        if ([self isStored:key]) {
-            NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
-            return data;
-        } else {
-            return nil;
-        }
+    NSParameterAssert(key);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
+    if ([self isStored:key]) {
+        NSData *data = [NSData dataWithContentsOfURL:[self fileURLWithKey:key]];
+        return data;
     } else {
         return nil;
     }
 }
 
 - (BOOL)isStored:(NSString *)key {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
-        return [[self fileURLWithKey:key] checkResourceIsReachableAndReturnError:nil];
-    }
-
-    return NO;
+    NSParameterAssert(key);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
+    return [[self fileURLWithKey:key] checkResourceIsReachableAndReturnError:nil];
 }
 
 - (NSURL *)fileURLWithKey:(NSString *)key {
-    if (key && [key isKindOfClass:[NSString class]] && [key length] > 0) {
+    NSParameterAssert(key);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
 #ifdef MD5_FOR_KEY
-        NSString *internalKey = [CMDataStorage internalKey:key];
-        return [self.cachePath URLByAppendingPathComponent:internalKey isDirectory:NO];
+    NSString *internalKey = [CMDataStorage internalKey:key];
+    return [self.cachePath URLByAppendingPathComponent:internalKey isDirectory:NO];
 #else
-        return [self.cachePath URLByAppendingPathComponent:key isDirectory:NO];
+    return [self.cachePath URLByAppendingPathComponent:key isDirectory:NO];
 #endif
-    } else {
-        return nil;
-    }
 }
 
 - (NSString *)filePathWithKey:(NSString *)key {
+    NSParameterAssert(key);
+    NSAssert([key isKindOfClass:[NSString class]] && [key length] > 0, @"key");
+    
     return [[self fileURLWithKey:key] path];
 }
 
-- (NSArray *)allKeysURLs {
+- (NSArray*)allKeysURLs {
     NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtURL:self.cachePath includingPropertiesForKeys:nil options:0 error:nil];
     return dirContents;
 }
 
-- (NSArray *)allKeysPaths {
+- (NSArray*)allKeysPaths {
     NSArray *dirContents = [get_file_manager() contentsOfDirectoryAtPath:[self.cachePath path] error:nil];
     return dirContents;
 }
@@ -227,6 +229,17 @@ static dispatch_queue_t get_disk_io_queue() {
     }
 
     return output;
+}
+
++ (BOOL)removeDirectoryForURL:(NSURL *)dirPath {
+    NSError *error = nil;
+    [get_file_manager() removeItemAtURL:dirPath error:&error];
+    
+    if (error) {
+        NSLog(@"Fail to remove storage directory '%@'", [error localizedDescription]);
+    }
+    
+    return !error;
 }
 
 + (BOOL)createDirectoryForURL:(NSURL *)dirPath {
