@@ -14,15 +14,13 @@
 @interface CMDataStorage : NSObject
 
 + (instancetype)sharedCacheStorage;
-
 + (instancetype)sharedDocumentsStorage;
-
 + (instancetype)sharedTemporaryStorage;
 
 /**
  Asynchronously writes data to the specified storage.
  
- Asynchronously call write on separated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
+ Asynchronously call writeToURL on separated GCD queue with key as file name (or MD5 of key). After it writes the data, the method will call block if it specified.
  
  @param data The data to be written. Required.
  @param key The string that will used as file name. Or MD5 of key if MD5_FOR_KEY define exist. Required.
@@ -124,5 +122,14 @@
  @return The NSArray object with all files paths stored in
  */
 - (NSArray *)allKeysPaths;
+
+/**
+ Removes all files in this storage
+ 
+ Remove current folder to make sure that all files will be deleted and creates new one. This metohs could tale some time according to you storege size.
+ 
+ @param block Complition block with result BOOL value. Optional.
+ */
+- (void)removeAllWithBlock:(void (^)(BOOL succeeds))block;
 
 @end

@@ -214,6 +214,20 @@ static dispatch_queue_t get_disk_io_queue() {
     return dirContents;
 }
 
+- (void)removeAllWithBlock:(void (^)(BOOL succeeds))block; {
+    dispatch_async(get_disk_io_queue(), ^{
+        BOOL succeeds = [CMDataStorage removeDirectoryForURL:self.cachePath];
+        
+        if (succeeds) {
+            succeeds = [CMDataStorage createDirectoryForURL:self.cachePath];
+        }
+        
+        if (block) {
+            block(succeeds);
+        }
+    });
+}
+
 
 #pragma mark - Private
 
