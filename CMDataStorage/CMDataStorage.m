@@ -88,10 +88,12 @@ static dispatch_queue_t get_disk_io_queue() {
         sharedInstance = [CMDataStorage new];
 
         sharedInstance.cachePath = [NSURL fileURLWithPath:NSTemporaryDirectory() isDirectory:YES];
-
-        if (![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
-            sharedInstance = nil;
-        }
+        
+        [sharedInstance removeAllWithBlock:^(BOOL succeeds) {
+            if (!succeeds || ![CMDataStorage createDirectoryForURL:sharedInstance.cachePath]) {
+                sharedInstance = nil;
+            }
+        }];
     });
     return sharedInstance;
 }
