@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name			= 'CMDataStorage'
-  s.version			= '1.3.0'
+  s.version			= '1.4.0'
   s.license  		= 'MIT'
   s.summary			= 'Simple and powerful API for read / write NSData from / to iOS Cache / Documents / Tmp folder.'
   s.homepage		= 'https://github.com/mureev/CMDataStorage'
@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   }
   s.source = {
     :git => 'https://github.com/mureev/CMDataStorage.git',
-    :tag => '1.3.0'
+    :tag => '1.4.0'
   }
   s.requires_arc	= true
   s.source_files	= 'CMDataStorage/*.{h,m}'
