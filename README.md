@@ -1,8 +1,8 @@
 # CMDataStorage
 
 [![Build Status](https://secure.travis-ci.org/mureev/CMDataStorage.png?branch=master)](http://travis-ci.org/mureev/CMDataStorage)
-[![Cocoapods](https://cocoapod-badges.herokuapp.com/v/CMDataStorage/badge.png)](http://cocoapods.org/?q=name%3ACMDataStorage%2A)
-[![Cocoapods](https://cocoapod-badges.herokuapp.com/p/CMDataStorage/badge.png)](http://cocoapods.org/?q=name%3ACMDataStorage%2A)
+[![CocoaPods](https://cocoapod-badges.herokuapp.com/v/CMDataStorage/badge.png)](http://cocoapods.org/?q=name%3ACMDataStorage%2A)
+[![CocoaPods](https://cocoapod-badges.herokuapp.com/p/CMDataStorage/badge.png)](http://cocoapods.org/?q=name%3ACMDataStorage%2A)
 ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
 Simple and powerful API to work with NSData in IOS Cache, Documents and Temp folder.
